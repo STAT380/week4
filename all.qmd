@@ -7,6 +7,7 @@ editor: visual
 ## Visualization
 
 ## Front Matter
+
 ```{r}
 library(tidyverse)
 library(palmerpenguins)
@@ -26,7 +27,6 @@ Instead, use a function (such as head, glimpse (from dplyr), str, etc.) that onl
 ```{r}
 head(iris, 10)
 ```
-
 
 ## Example 2 - Common Visualizations
 
@@ -80,18 +80,17 @@ ggplot(data = penguins, mapping = aes(x = sex, y = body_mass_g)) +
 ```
 
 ## Example 3 - Loading and previewing a dataset from a package
+
 ```{r}
 glimpse(penguins)
 ```
 
-
 ## Example 4 - Layers of ggplot demonstration
-
 
 ## Example 5 - Using aesthetics
 
-
 ## Example 6 - Faceting using two categorical variables
+
 ```{r}
 ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) + 
   geom_point(shape = 5) +
@@ -100,13 +99,9 @@ ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
        y = "Bill Depth (in mm)")
 ```
 
-
 ## Example 7 - Faceting using one categorical variable
 
-
 ## Example 8 - Boxplots
-
-
 
 ### Data Manipulation
 
@@ -124,7 +119,9 @@ Ins <- read.csv("./data/L02_Insurance_m.csv")
 ```
 
 ## Example 1 - Supporting data visualization with numerical summaries
+
 #### Example 1 - Incorrect code
+
 ```{r}
 penguins %>%
   group_by(species) %>%
@@ -135,6 +132,7 @@ penguins %>%
 ```
 
 #### Example 1 - Corrected code
+
 ```{r}
 penguins %>%
   group_by(species) %>%
@@ -145,6 +143,7 @@ penguins %>%
 ```
 
 ## Example 2 - Alternative method for finding the summary statistics
+
 ```{r}
 #Alternative Method
 
@@ -169,7 +168,9 @@ sd(df3$body_mass_g, na.rm = TRUE)
 ```
 
 ## Example 5 - dplyr and ggplot practice in R
+
 #### Example 5 Part a
+
 ```{r}
 #Calculate medical charges by region for smokers over 40
 Ins %>%
@@ -190,6 +191,7 @@ Ins %>%
 ```
 
 #### Example 5 Part b
+
 ```{r}
 #Creating Obesity Classification variable
 Ins <- 
@@ -207,17 +209,16 @@ ggplot(data = Ins,
 
 Some observation:
 
-- Smokers appear to have higher charges than non-smokers
+-   Smokers appear to have higher charges than non-smokers
 
-- For non-smokers, there does not appear to be much of a difference in the charges for those who are obese or not
+-   For non-smokers, there does not appear to be much of a difference in the charges for those who are obese or not
 
-- For smokers, being obese is associated with higher charges. Note, this is not suggesting that being obese CAUSES higher charges
-
+-   For smokers, being obese is associated with higher charges. Note, this is not suggesting that being obese CAUSES higher charges
 
 ## Example 6 - A note about masking
 
-
 #### Example 6c
+
 Add `Hmisc` library to front matter. Then run the code provided below.
 
 ```{r}
@@ -228,8 +229,8 @@ penguins %>%
             StdDevBodyMass = sd(body_mass_g, na.rm = TRUE))
 ```
 
+## Another Example
 
-## Another Example 
 ```{r}
 rm(list = ls()) #CAUTION: Removes all objects in your environment
 library(tidyverse)
@@ -238,6 +239,7 @@ library(nycflights13)
 ```
 
 ## Example 2 Part c - Creating Superhero and Publisher Datasets
+
 ```{r}
 #Create superheroes table (requires tibble package)
 superheroes <- tibble::tribble(
@@ -260,31 +262,34 @@ publishers <- tibble::tribble(
 )
 ```
 
-
 ## Example 2 Part c - Performing join from 2b
+
 ```{r}
 inner_join(publishers, superheroes)
 ```
 
 ## Example 2d - 1st join
+
 ```{r}
 left_join(superheroes, publishers, 
           by = c("publisher" = "publisher"))
 ```
 
 ## Example 2d - second join
+
 ```{r}
 publishers %>% left_join(superheroes, 
                          by = c("publisher" = "publisher"))
 ```
 
 ## Example 2d - third join
+
 ```{r}
 inner_join(superheroes, publishers)
 ```
 
-
 ## Example 3a
+
 ```{r}
 flights %>%
   group_by(carrier) %>%
@@ -294,6 +299,7 @@ flights %>%
 ```
 
 ## Example 3b
+
 ```{r}
 flights %>%
   group_by(carrier) %>%
@@ -303,8 +309,8 @@ flights %>%
   left_join(airlines, by = c("carrier" = "carrier"))
 ```
 
-
 ## Example 3c
+
 ```{r}
 flights %>%
   group_by(carrier) %>%
@@ -316,12 +322,6 @@ flights %>%
   knitr::kable(digits = 1, align = "lccc" , 
                col.names = c("Name", "Carrier", "Number of Flights", "Mean Arrival Delay"))
 ```
-
-
-
-
-
-
 
 ### Regression
 
@@ -337,6 +337,7 @@ Vehicles <- read.csv("~/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniver
 ```
 
 ## Example 5b - Rename Variables and remove observations with missing values
+
 ```{r}
 Vehicles <- 
   Vehicles %>%
@@ -348,9 +349,11 @@ Vehicles <-
 ```
 
 ## Example 5c - Which variable is most likely to explain the other?
+
 I would expect miles to influence price. We will call miles the explanatory variable (x, input, feature, etc.). The price is the response variable (y, output, taget, response)
 
 ## Example 5d - Scatterplot Showing Price as a Function of Miles
+
 ```{r}
 ggplot(data = Vehicles, mapping = aes(x = Miles, y = Price)) +
   geom_point() +
@@ -360,26 +363,24 @@ ggplot(data = Vehicles, mapping = aes(x = Miles, y = Price)) +
 cor(x = Vehicles$Miles, y = Vehicles$Price)
 ```
 
-Observations:
-- If there was no linear association, I would expect the line to be horizontal
-- in this case, the weak negative linear association. As miles increases, I would expect price to decrease. The relationship looks weak (the correlation is -0.08)
+Observations: - If there was no linear association, I would expect the line to be horizontal - in this case, the weak negative linear association. As miles increases, I would expect price to decrease. The relationship looks weak (the correlation is -0.08)
 
 NOTE: The correlation is a number between -1 and +1. The closer the absolute value of the correlation is to 1, the stronger the relationship. When the correlation is close to 0, there is no linear relationship.
 
-
 ## Example 5e - What other variables could be used to help explain the variation in price?
-- year car was built
-- past accidents/history
-- brand of car
-- number of owners
-- model of car 
-- type of vehicle (car vs truck, 2 dr vs 4 dr, 4wd vs not)
-- gas vs electric
-- condition of car 
-- features of the car (ac, sunroof, etc.)
 
+-   year car was built
+-   past accidents/history
+-   brand of car
+-   number of owners
+-   model of car
+-   type of vehicle (car vs truck, 2 dr vs 4 dr, 4wd vs not)
+-   gas vs electric
+-   condition of car
+-   features of the car (ac, sunroof, etc.)
 
 ## Example 5f - Scatterplot Showing Price as a Function of Miles with Model
+
 ```{r}
 ggplot(data = Vehicles, 
        mapping = aes(x = Miles, y = Price, color = Model, shape = Model)) +
@@ -389,11 +390,12 @@ ggplot(data = Vehicles,
 
 Some observations:
 
-- Within each model, there is a negative linear association. As miles increases, price decreases.
-- The rate of change in price with respect to miles (i.e., the slopes) may be different for the different models. It looks like Camry's and Volt's have similar slopes, but the slope for Tacoma's may not be as steep. 
-- For a given number of miles, Tacoma's are more expensive than Camry's and Camry's are more expensive than Volt's.
+-   Within each model, there is a negative linear association. As miles increases, price decreases.
+-   The rate of change in price with respect to miles (i.e., the slopes) may be different for the different models. It looks like Camry's and Volt's have similar slopes, but the slope for Tacoma's may not be as steep.
+-   For a given number of miles, Tacoma's are more expensive than Camry's and Camry's are more expensive than Volt's.
 
 ## 5g - Create new dataset for Camry's only
+
 ```{r}
 Camrys <- 
   Vehicles %>%
@@ -401,6 +403,7 @@ Camrys <-
 ```
 
 ## 5h - Build Simple Linear Regresssion Model
+
 ```{r}
 reg_res <- lm(Price ~ Miles, data = Camrys)
 summary(reg_res)
@@ -409,10 +412,3 @@ summary(reg_res)
 The estimated regression equation is given by:
 
 $$\hat{y}_{i} = a + bx_{i}$$
-
-
-
-
-
-
-
