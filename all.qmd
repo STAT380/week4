@@ -1,0 +1,418 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+## Visualization
+
+## Front Matter
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+## Example 1 (5th bullet point)
+
+Avoid displaying full datasets in your Markdown document because it is difficult to read.
+
+```{r}
+# iris a a built in dataset containing info on a sample of iris flowers
+iris
+```
+
+Instead, use a function (such as head, glimpse (from dplyr), str, etc.) that only shows a preview/summary of the dataset.
+
+```{r}
+head(iris, 10)
+```
+
+
+## Example 2 - Common Visualizations
+
+The following illustrates some common types of plots and the corresponding code. The examples require the `dplyr` and `ggplot2` libraries, both of which are loaded as part of the `tidyverse`. The examples also `penguins` data set from the `palmerpenguins` library.
+
+```{r}
+#Bar Plot
+ggplot(data = penguins, mapping = aes(x = species)) +
+  geom_bar(fill = "white", color = "black") +
+  labs(x = "Species",
+       y = "Number of Penguins",
+       title = "Penguin Species in Palmer Penguins Dataset")
+
+#NOTE: Inside aes(), no y axis is specified. This is because the y axis is not a variable contained in the dataset. In a bar plot, the y axis is the count which is determined by the geom_bar procedure
+```
+
+```{r}
+#Histogram
+ggplot(data = starwars, mapping = aes(x = height)) + 
+  geom_histogram(binwidth = 20, color = "black", fill = "white") +
+  labs(x = "Height (in Centimeters)",
+       y = "Count",
+       title = "Character Heights in Star Wars")
+#NOTE: Inside aes(), no y axis is specified. This is because the y axis is not a variable contained in the dataset. In a histogram, the y axis is the count which is determined by the geom_histogram procedure
+```
+
+```{r}
+#Density Plot
+ggplot(data = starwars, mapping = aes(x = height)) + 
+  geom_density() +
+  labs(x = "Height (in Centimeters)",
+       y = "Density",
+       title = "Character Heights in Star Wars")
+```
+
+```{r}
+#Scatterplot
+ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
+  geom_point(shape = 5) +
+  labs(title = "Weight vs. Height for Characters in Star Wars",
+       x = "Height (in Centimeters)", y = "Weight (in Kilograms)")
+```
+
+```{r}
+#Side by side boxplots
+ggplot(data = penguins, mapping = aes(x = sex, y = body_mass_g)) +
+  geom_boxplot() +
+  labs(title = "Body Mass vs. Sex for Palmer Penguins",
+       x = "Sex of Penguin", 
+       y = "Body Mass (in Grams)")
+```
+
+## Example 3 - Loading and previewing a dataset from a package
+```{r}
+glimpse(penguins)
+```
+
+
+## Example 4 - Layers of ggplot demonstration
+
+
+## Example 5 - Using aesthetics
+
+
+## Example 6 - Faceting using two categorical variables
+```{r}
+ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) + 
+  geom_point(shape = 5) +
+  facet_grid(species ~ sex) +
+  labs(x = "Bill Length (in mm)",
+       y = "Bill Depth (in mm)")
+```
+
+
+## Example 7 - Faceting using one categorical variable
+
+
+## Example 8 - Boxplots
+
+
+
+### Data Manipulation
+
+```{r}
+#Remove all objects from Environment
+remove(list = ls()) #CAUTION: This deletes everything in the environment
+
+library(tidyverse)
+library(palmerpenguins)
+library(Hmisc)
+data(penguins)
+
+kc <- read.csv("./data/kc1000v5.csv")
+Ins <- read.csv("./data/L02_Insurance_m.csv")
+```
+
+## Example 1 - Supporting data visualization with numerical summaries
+#### Example 1 - Incorrect code
+```{r}
+penguins %>%
+  group_by(species) %>%
+  summarize(N = n(),
+            MeanMass = mean(body_mass_g),
+            MedianMass = median(body_mass_g),
+            StdDevMass = sd(body_mass_g))
+```
+
+#### Example 1 - Corrected code
+```{r}
+penguins %>%
+  group_by(species) %>%
+  summarize(N = n(),
+            MeanMass = mean(body_mass_g, na.rm = TRUE),
+            MedianMass = median(body_mass_g, na.rm = TRUE),
+            StdDevMass = sd(body_mass_g, na.rm = TRUE))
+```
+
+## Example 2 - Alternative method for finding the summary statistics
+```{r}
+#Alternative Method
+
+#Create dataset for each species and calculate values; repeat for each species
+df1 <- filter(penguins, species == "Adelie")
+nrow(df1)
+mean(df1$body_mass_g, na.rm = TRUE)
+median(df1$body_mass_g, na.rm = TRUE)
+sd(df1$body_mass_g, na.rm = TRUE)
+
+df2 <- filter(penguins, species == "Chinstrap")
+nrow(df2)
+mean(df2$body_mass_g, na.rm = TRUE)
+median(df2$body_mass_g, na.rm = TRUE)
+sd(df2$body_mass_g, na.rm = TRUE)    
+
+df3 <- filter(penguins, species == "Gentoo")
+nrow(df3)
+mean(df3$body_mass_g, na.rm = TRUE)
+median(df3$body_mass_g, na.rm = TRUE)
+sd(df3$body_mass_g, na.rm = TRUE)
+```
+
+## Example 5 - dplyr and ggplot practice in R
+#### Example 5 Part a
+```{r}
+#Calculate medical charges by region for smokers over 40
+Ins %>%
+  filter(age > 40 & smoker == "yes") %>%
+  group_by(region) %>%
+  summarize(N = n(),
+            MeanCharge = mean(charges, na.rm = TRUE),
+            MedCharge = median(charges, na.rm = TRUE),
+            sdCharge = sd(charges, na.rm = TRUE))
+```
+
+```{r}
+#Create data frames required for the plot
+```
+
+```{r}
+#Create visualization
+```
+
+#### Example 5 Part b
+```{r}
+#Creating Obesity Classification variable
+Ins <- 
+  Ins %>%
+  mutate(Obese = ifelse(bmi >= 30, "Yes", "No"))
+
+#Create Visualization showing relationship between charges, obesity, and smoking status
+ggplot(data = Ins,
+       mapping = aes(x = Obese, y = charges)) +
+  geom_boxplot() +
+  facet_grid(. ~ smoker) +
+  labs(x = "Obesity Status",
+       y = "Charges")
+```
+
+Some observation:
+
+- Smokers appear to have higher charges than non-smokers
+
+- For non-smokers, there does not appear to be much of a difference in the charges for those who are obese or not
+
+- For smokers, being obese is associated with higher charges. Note, this is not suggesting that being obese CAUSES higher charges
+
+
+## Example 6 - A note about masking
+
+
+#### Example 6c
+Add `Hmisc` library to front matter. Then run the code provided below.
+
+```{r}
+penguins %>%
+  group_by(species) %>%
+  dplyr::summarize(N = n(), 
+            MedBodyMass = median(body_mass_g, na.rm = TRUE),
+            StdDevBodyMass = sd(body_mass_g, na.rm = TRUE))
+```
+
+
+## Another Example 
+```{r}
+rm(list = ls()) #CAUTION: Removes all objects in your environment
+library(tidyverse)
+library(nycflights13)
+#Add libraries as needed
+```
+
+## Example 2 Part c - Creating Superhero and Publisher Datasets
+```{r}
+#Create superheroes table (requires tibble package)
+superheroes <- tibble::tribble(
+  ~name, ~alignment, ~gender, ~publisher,
+  "Magneto", "bad", "male", "Marvel",
+  "Storm", "good", "female", "Marvel",
+  "Mystique", "bad", "female", "Marvel",
+  "Batman", "good", "male", "DC",
+  "Joker", "bad", "male", "DC",
+  "Catwoman", "bad", "female", "DC",
+  "Hellboy", "good", "male", "Dark Horse Comics"
+)
+
+#Create publishers table
+publishers <- tibble::tribble(
+  ~publisher, ~yr_founded,
+  "DC", 1934,
+  "Marvel", 1939,
+  "Image", 1992
+)
+```
+
+
+## Example 2 Part c - Performing join from 2b
+```{r}
+inner_join(publishers, superheroes)
+```
+
+## Example 2d - 1st join
+```{r}
+left_join(superheroes, publishers, 
+          by = c("publisher" = "publisher"))
+```
+
+## Example 2d - second join
+```{r}
+publishers %>% left_join(superheroes, 
+                         by = c("publisher" = "publisher"))
+```
+
+## Example 2d - third join
+```{r}
+inner_join(superheroes, publishers)
+```
+
+
+## Example 3a
+```{r}
+flights %>%
+  group_by(carrier) %>%
+  summarize(TotalFlights = n(),
+            MeanArrivalDelay = mean(arr_delay, na.rm = TRUE)) %>%
+  arrange(desc(MeanArrivalDelay))
+```
+
+## Example 3b
+```{r}
+flights %>%
+  group_by(carrier) %>%
+  summarize(TotalFlights = n(),
+            MeanArrivalDelay = mean(arr_delay, na.rm = TRUE)) %>%
+  arrange(desc(MeanArrivalDelay)) %>% 
+  left_join(airlines, by = c("carrier" = "carrier"))
+```
+
+
+## Example 3c
+```{r}
+flights %>%
+  group_by(carrier) %>%
+  summarize(TotalFlights = n(),
+            MeanArrivalDelay = mean(arr_delay, na.rm = TRUE)) %>%
+  arrange(desc(MeanArrivalDelay)) %>% 
+  left_join(airlines, by = c("carrier" = "carrier")) %>%
+  select(name, carrier, TotalFlights, MeanArrivalDelay) %>%
+  knitr::kable(digits = 1, align = "lccc" , 
+               col.names = c("Name", "Carrier", "Number of Flights", "Mean Arrival Delay"))
+```
+
+
+
+
+
+
+
+### Regression
+
+```{r}
+#CAUTION: This removes all objects from Environment
+rm(list = ls())
+
+#Add libraries as needed
+library(tidyverse)
+
+#Read in Dataset
+Vehicles <- read.csv("~/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/PSU/Teaching/STAT380/Fall2023/Data/L04_Vehicles_m.csv", header=FALSE)
+```
+
+## Example 5b - Rename Variables and remove observations with missing values
+```{r}
+Vehicles <- 
+  Vehicles %>%
+  rename(Price = V1,
+         Miles = V2,
+         Manufacturer = V3,
+         Model = V4) %>%
+  na.omit()
+```
+
+## Example 5c - Which variable is most likely to explain the other?
+I would expect miles to influence price. We will call miles the explanatory variable (x, input, feature, etc.). The price is the response variable (y, output, taget, response)
+
+## Example 5d - Scatterplot Showing Price as a Function of Miles
+```{r}
+ggplot(data = Vehicles, mapping = aes(x = Miles, y = Price)) +
+  geom_point() +
+  geom_smooth(method = lm, se = T)
+
+#Find correlation between miles and price
+cor(x = Vehicles$Miles, y = Vehicles$Price)
+```
+
+Observations:
+- If there was no linear association, I would expect the line to be horizontal
+- in this case, the weak negative linear association. As miles increases, I would expect price to decrease. The relationship looks weak (the correlation is -0.08)
+
+NOTE: The correlation is a number between -1 and +1. The closer the absolute value of the correlation is to 1, the stronger the relationship. When the correlation is close to 0, there is no linear relationship.
+
+
+## Example 5e - What other variables could be used to help explain the variation in price?
+- year car was built
+- past accidents/history
+- brand of car
+- number of owners
+- model of car 
+- type of vehicle (car vs truck, 2 dr vs 4 dr, 4wd vs not)
+- gas vs electric
+- condition of car 
+- features of the car (ac, sunroof, etc.)
+
+
+## Example 5f - Scatterplot Showing Price as a Function of Miles with Model
+```{r}
+ggplot(data = Vehicles, 
+       mapping = aes(x = Miles, y = Price, color = Model, shape = Model)) +
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
+
+Some observations:
+
+- Within each model, there is a negative linear association. As miles increases, price decreases.
+- The rate of change in price with respect to miles (i.e., the slopes) may be different for the different models. It looks like Camry's and Volt's have similar slopes, but the slope for Tacoma's may not be as steep. 
+- For a given number of miles, Tacoma's are more expensive than Camry's and Camry's are more expensive than Volt's.
+
+## 5g - Create new dataset for Camry's only
+```{r}
+Camrys <- 
+  Vehicles %>%
+  filter(Model == "Camry")
+```
+
+## 5h - Build Simple Linear Regresssion Model
+```{r}
+reg_res <- lm(Price ~ Miles, data = Camrys)
+summary(reg_res)
+```
+
+The estimated regression equation is given by:
+
+$$\hat{y}_{i} = a + bx_{i}$$
+
+
+
+
+
+
+
