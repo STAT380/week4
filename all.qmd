@@ -13,7 +13,7 @@ library(tidyverse)
 library(palmerpenguins)
 ```
 
-## Example 1 (5th bullet point)
+## Example 1
 
 Avoid displaying full datasets in your Markdown document because it is difficult to read.
 
